@@ -23,7 +23,7 @@ else if (input === 'spotify-this-song') {
 }
 
 // bands
-else if (input === 'concert-this') {
+else (input === 'concert-this'); {
   concertThis(searchType);
 
 }
@@ -116,9 +116,10 @@ function  concertThis(concert) {
 
   axios.get("https://rest.bandsintown.com/artists/" + concertQuery + "/events?app_id=codingbootcamp").then(function (response) {
     // handle success
-
-    var jsonData = response.data;
-
+  console.log(concertQuery);
+     var jsonData = response.data;
+     console.log(jsonData);
+    
     // conditional statement
     for (var i = 0; i < jsonData.length; i++) {
 
@@ -130,15 +131,18 @@ function  concertThis(concert) {
 
       ].join("/n/n")
 
+
+console.log(concertFind);
+
+
       fs.appendFile("log.txt", concertFind, function (err) {
 
         if (err) {
           return console.log(err);
         }
         // Test/debug
-        console.log("Sucess");
-        console.log(concertFind);
-
+        // console.log("Sucess");
+        // console.log(concertFind);
 
 
       })
@@ -149,7 +153,27 @@ function  concertThis(concert) {
     };
 
 
-  });
+  }).catch(function (error){
+      Check(error);
+  })
+  
+};
 
-
+function Check (error) {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2x
+    
+    console.log(error.response.data);
+    // console.log(error.response.status);
+    // console.log(error.response.headers);
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an object that comes back with details pertaining to the error that occurred.
+    console.log(error.request);
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log("Error", error.message);
+  }
+  console.log(error.config);
 };
